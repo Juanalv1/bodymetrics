@@ -1,103 +1,245 @@
-import Image from "next/image";
+"use client"
 
-export default function Home() {
+import Link from "next/link"
+import Navbar from "@/components/layout/Navbar"
+import Footer from "@/components/layout/Footer"
+import { CATEGORIES } from "@/lib/types"
+
+export default function HomePage() {
   return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+    <>
+      <Navbar />
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
+      <main style={{ background: "#0A0A0A", minHeight: "100vh" }}>
+        {/* Hero */}
+        <section className="max-w-6xl mx-auto px-6 pt-40 pb-24">
+          <div className="flex flex-col items-start gap-8 max-w-3xl">
+            {/* Eyebrow */}
+            <div
+              className="animate-fade-up inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-medium tracking-widest uppercase"
+              style={{
+                border: "1px solid rgba(170,255,0,0.3)",
+                color: "#AAFF00",
+                background: "rgba(170,255,0,0.06)",
+              }}
+            >
+              <span
+                className="inline-block w-1.5 h-1.5 rounded-full"
+                style={{ background: "#AAFF00" }}
+              />
+              Calculadora científica gratuita
+            </div>
+
+            {/* Headline */}
+            <h1
+              className="animate-fade-up delay-100 font-display leading-none tracking-tight"
+              style={{ fontSize: "clamp(3rem, 8vw, 6rem)", color: "#FAFAFA" }}
+            >
+              Conoce tu{" "}
+              <span
+                style={{
+                  color: "#AAFF00",
+                  textShadow: "0 0 40px rgba(170,255,0,0.4)",
+                }}
+              >
+                composición
+              </span>{" "}
+              corporal real
+            </h1>
+
+            {/* Subhead */}
+            <p
+              className="animate-fade-up delay-200 text-lg leading-relaxed max-w-xl"
+              style={{ color: "#888" }}
+            >
+              Calcula tu porcentaje de grasa corporal con los métodos U.S. Navy
+              e IMC. Sin registro, sin suscripciones. Solo resultados.
+            </p>
+
+            {/* CTAs */}
+            <div className="animate-fade-up delay-300 flex flex-col sm:flex-row gap-4">
+              <Link
+                href="/calculator"
+                className="inline-flex items-center gap-2 px-8 py-4 rounded-xl font-semibold text-base transition-all duration-200"
+                style={{ background: "#AAFF00", color: "#0A0A0A" }}
+              >
+                Calcular ahora
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M5 12h14M12 5l7 7-7 7"/>
+                </svg>
+              </Link>
+
+              <Link
+                href="/ai-analysis"
+                className="inline-flex items-center gap-2 px-8 py-4 rounded-xl font-medium text-base transition-all duration-200"
+                style={{
+                  border: "1px solid #2a2a2a",
+                  color: "#FAFAFA",
+                  background: "transparent",
+                }}
+              >
+                <span style={{ color: "#AAFF00" }}>✦</span>
+                Análisis con IA
+              </Link>
+            </div>
+          </div>
+
+          {/* Stats strip */}
+          <div className="animate-fade-up delay-400 mt-20 grid grid-cols-2 md:grid-cols-4 gap-4">
+            {[
+              { value: "2", label: "Métodos validados" },
+              { value: "4", label: "Categorías ACE" },
+              { value: "100%", label: "Gratis siempre" },
+              { value: "0", label: "Datos almacenados" },
+            ].map((stat) => (
+              <div
+                key={stat.label}
+                className="p-6 rounded-2xl"
+                style={{ border: "1px solid #2a2a2a", background: "#111" }}
+              >
+                <div className="font-display text-4xl" style={{ color: "#AAFF00" }}>
+                  {stat.value}
+                </div>
+                <div className="text-sm mt-1" style={{ color: "#666" }}>
+                  {stat.label}
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* How it works */}
+        <section
+          style={{ borderTop: "1px solid #1a1a1a", borderBottom: "1px solid #1a1a1a", background: "#0d0d0d" }}
+          className="py-20"
+        >
+          <div className="max-w-6xl mx-auto px-6">
+            <div className="mb-12">
+              <p className="text-xs uppercase tracking-widest mb-3" style={{ color: "#AAFF00" }}>
+                Proceso
+              </p>
+              <h2 className="font-display text-4xl" style={{ color: "#FAFAFA" }}>
+                Tres pasos, un resultado
+              </h2>
+            </div>
+
+            <div className="grid md:grid-cols-3 gap-6">
+              {[
+                {
+                  step: "01",
+                  title: "Elige el método",
+                  desc: "Selecciona entre U.S. Navy (más preciso) o IMC (más simple). Ambos están validados científicamente.",
+                },
+                {
+                  step: "02",
+                  title: "Ingresa tus medidas",
+                  desc: "Altura, cintura y cuello. El sistema convierte automáticamente entre métrico e imperial.",
+                },
+                {
+                  step: "03",
+                  title: "Obtén tu resultado",
+                  desc: "Tu porcentaje exacto, categoría según el American Council on Exercise, y comparativa de rangos.",
+                },
+              ].map((item) => (
+                <div
+                  key={item.step}
+                  className="p-8 rounded-2xl"
+                  style={{ border: "1px solid #2a2a2a", background: "#111" }}
+                >
+                  <div className="font-display text-6xl mb-6" style={{ color: "#1e1e1e" }}>
+                    {item.step}
+                  </div>
+                  <h3 className="font-semibold text-lg mb-3" style={{ color: "#FAFAFA" }}>
+                    {item.title}
+                  </h3>
+                  <p className="text-sm leading-relaxed" style={{ color: "#666" }}>
+                    {item.desc}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* Categories reference */}
+        <section className="py-20">
+          <div className="max-w-6xl mx-auto px-6">
+            <div className="mb-12">
+              <p className="text-xs uppercase tracking-widest mb-3" style={{ color: "#AAFF00" }}>
+                Referencia ACE
+              </p>
+              <h2 className="font-display text-4xl" style={{ color: "#FAFAFA" }}>
+                ¿Qué significa tu porcentaje?
+              </h2>
+            </div>
+
+            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+              {CATEGORIES.map((cat) => (
+                <div
+                  key={cat.label}
+                  className="p-6 rounded-2xl"
+                  style={{
+                    border: `1px solid ${cat.color}33`,
+                    background: `${cat.color}08`,
+                  }}
+                >
+                  <div className="w-3 h-3 rounded-full mb-4" style={{ background: cat.color }} />
+                  <h3 className="font-semibold text-xl mb-3" style={{ color: cat.color }}>
+                    {cat.label}
+                  </h3>
+                  <div className="space-y-2">
+                    <div className="flex justify-between text-sm">
+                      <span style={{ color: "#666" }}>Hombres</span>
+                      <span style={{ color: "#FAFAFA" }}>
+                        {cat.range.male[0]}–{cat.range.male[1] === 100 ? cat.range.male[0] + "%+" : cat.range.male[1] + "%"}
+                      </span>
+                    </div>
+                    <div className="flex justify-between text-sm">
+                      <span style={{ color: "#666" }}>Mujeres</span>
+                      <span style={{ color: "#FAFAFA" }}>
+                        {cat.range.female[0]}–{cat.range.female[1] === 100 ? cat.range.female[0] + "%+" : cat.range.female[1] + "%"}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* CTA Banner */}
+        <section className="pb-24">
+          <div className="max-w-6xl mx-auto px-6">
+            <div
+              className="p-12 rounded-3xl text-center"
+              style={{
+                background: "linear-gradient(135deg, #111 0%, #0d1a00 100%)",
+                border: "1px solid rgba(170,255,0,0.2)",
+              }}
+            >
+              <h2 className="font-display text-4xl md:text-5xl mb-4" style={{ color: "#FAFAFA" }}>
+                Empieza ahora,{" "}
+                <span style={{ color: "#AAFF00" }}>gratis</span>
+              </h2>
+              <p className="text-base mb-8" style={{ color: "#666" }}>
+                Sin registro. Sin tarjeta. Solo resultados reales.
+              </p>
+              <Link
+                href="/calculator"
+                className="inline-flex items-center gap-2 px-10 py-4 rounded-xl font-semibold text-base transition-all duration-200"
+                style={{ background: "#AAFF00", color: "#0A0A0A" }}
+              >
+                Ir a la calculadora
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M5 12h14M12 5l7 7-7 7"/>
+                </svg>
+              </Link>
+            </div>
+          </div>
+        </section>
       </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
-  );
+
+      <Footer />
+    </>
+  )
 }
