@@ -2,7 +2,15 @@
   "permissions": {
     "allow": [
       "Bash(npm install:*)",
-      "Bash(npx shadcn@latest init --defaults)"
+      "Bash(npx shadcn@latest init --defaults)",
+      "Bash(npx shadcn@latest add card tabs input label badge alert --yes)",
+      "Bash(git commit:*)",
+      "Bash(vercel --yes)",
+      "Bash(node -e \"console.log\\(require\\(''./package.json''\\).dependencies.next\\)\")",
+      "Bash(git add:*)",
+      "Bash(git push:*)",
+      "Bash(vercel --prod)",
+      "Bash(grep -E \"\\\\.\\(png|jpg|jpeg|gif|svg\\)$|image\\\\.|opengraph|twitter\")"
     ]
   }
 }

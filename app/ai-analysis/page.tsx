@@ -1,6 +1,14 @@
+import type { Metadata } from "next"
 import Link from "next/link"
 import Navbar from "@/components/layout/Navbar"
 import Footer from "@/components/layout/Footer"
+
+export const metadata: Metadata = {
+  title: "Análisis de Grasa Corporal con IA — Próximamente",
+  description:
+    "Próximamente: análisis visual de composición corporal con inteligencia artificial. Por ahora usa nuestra calculadora gratuita con el método U.S. Navy.",
+  robots: { index: false, follow: true },
+}
 
 export default function AIAnalysisPage() {
   return (

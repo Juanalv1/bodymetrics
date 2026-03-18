@@ -14,9 +14,46 @@ const dmSerif = DM_Serif_Display({
   weight: "400",
 })
 
+const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL ?? "https://bodymetrics-lake.vercel.app"
+
 export const metadata: Metadata = {
-  title: "BodyMetrics — Calculadora de Grasa Corporal",
-  description: "Calcula tu porcentaje de grasa corporal con métodos validados científicamente. Rápido, preciso y gratuito.",
+  metadataBase: new URL(BASE_URL),
+  title: {
+    default: "BodyMetrics — Calculadora de Grasa Corporal Gratis",
+    template: "%s | BodyMetrics",
+  },
+  description:
+    "Calcula tu porcentaje de grasa corporal gratis con el método U.S. Navy. Sin registro. Resultado instantáneo con categorías según el American Council on Exercise.",
+  keywords: [
+    "calculadora grasa corporal",
+    "porcentaje grasa corporal",
+    "calcular grasa corporal gratis",
+    "método navy grasa corporal",
+    "composición corporal",
+    "body fat calculator español",
+    "grasa corporal hombre mujer",
+  ],
+  authors: [{ name: "BodyMetrics" }],
+  creator: "BodyMetrics",
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
+  },
+  openGraph: {
+    type: "website",
+    siteName: "BodyMetrics",
+    locale: "es_ES",
+  },
+  twitter: {
+    card: "summary_large_image",
+    site: "@bodymetrics",
+  },
 }
 
 export default function RootLayout({
