@@ -30,9 +30,6 @@ export default function Navbar() {
         {/* Nav links */}
         <div className="flex items-center gap-1">
           <NavLink href="/" active={pathname === "/"}>
-            Inicio
-          </NavLink>
-          <NavLink href="/calculator" active={pathname === "/calculator"}>
             Calculadora
           </NavLink>
           <NavLink href="/ai-analysis" active={pathname === "/ai-analysis"}>

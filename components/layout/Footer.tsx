@@ -17,7 +17,7 @@ export default function Footer() {
 
         <div className="flex items-center gap-6">
           <Link
-            href="/calculator"
+            href="/"
             className="text-sm transition-colors"
             style={{ color: "#555" }}
             onMouseEnter={(e) => (e.currentTarget.style.color = "#AAFF00")}
