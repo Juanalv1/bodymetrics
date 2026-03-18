@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <!-- Background circle -->
+  <rect width="32" height="32" rx="8" fill="#0A0A0A"/>
+
+  <!-- Gauge track (dim) -->
+  <path
+    d="M 6 22 A 10 10 0 0 1 26 22"
+    fill="none"
+    stroke="#2a2a2a"
+    stroke-width="3"
+    stroke-linecap="round"
+  />
+
+  <!-- Gauge fill (accent) -->
+  <path
+    d="M 6 22 A 10 10 0 0 1 20.07 12.93"
+    fill="none"
+    stroke="#AAFF00"
+    stroke-width="3"
+    stroke-linecap="round"
+  />
+
+  <!-- Needle -->
+  <line
+    x1="16" y1="22"
+    x2="20.07" y2="12.93"
+    stroke="#AAFF00"
+    stroke-width="2"
+    stroke-linecap="round"
+  />
+
+  <!-- Center hub -->
+  <circle cx="16" cy="22" r="2" fill="#AAFF00"/>
+</svg>
