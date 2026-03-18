@@ -1,45 +1,39 @@
 "use client"
 
 import { useState } from "react"
-import type { Sex, UnitSystem, CalculationMethod, NavyInputs, BMIInputs, BodyFatResult } from "@/lib/types"
-import { calculateNavy, validateNavy, calculateBMI, validateBMI } from "@/lib/formulas"
+import type { Sex, UnitSystem, NavyInputs, BodyFatResult } from "@/lib/types"
+import { calculateNavy, validateNavy } from "@/lib/formulas"
 
 interface MeasurementsFormProps {
   onResult: (result: BodyFatResult, sex: Sex) => void
 }
 
-// Unit conversion helpers
-const cmToIn = (cm: number) => Math.round(cm / 2.54 * 10) / 10
 const inToCm = (inch: number) => Math.round(inch * 2.54 * 10) / 10
-const kgToLb = (kg: number) => Math.round(kg * 2.205 * 10) / 10
-const lbToKg = (lb: number) => Math.round(lb / 2.205 * 10) / 10
-
-interface FormField {
-  key: string
-  label: string
-  placeholder: string
-  unit: string
-  icon: React.ReactNode
-}
 
 const RulerIcon = () => (
-  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
     <path d="M21.3 8.7 8.7 21.3c-1 1-2.5 1-3.4 0l-2.6-2.6c-1-1-1-2.5 0-3.4L15.3 2.7c1-1 2.5-1 3.4 0l2.6 2.6c1 1 1 2.5 0 3.4Z"/>
     <path d="m7.5 10.5 2 2M10.5 7.5l2 2M13.5 4.5l2 2M4.5 13.5l2 2"/>
   </svg>
 )
 
-const WeightIcon = () => (
-  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-    <circle cx="12" cy="5" r="3"/><path d="M6.5 8a2 2 0 0 0-1.905 1.46L2.1 18.5A2 2 0 0 0 4 21h16a2 2 0 0 0 1.925-2.54L19.4 9.5A2 2 0 0 0 17.48 8Z"/>
-  </svg>
-)
-
-const PersonIcon = () => (
-  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-    <circle cx="12" cy="7" r="4"/><path d="M5.5 21a6.5 6.5 0 0 1 13 0"/>
-  </svg>
-)
+function HowToLink({ guideAnchor }: { guideAnchor: string }) {
+  return (
+    <a
+      href={guideAnchor}
+      className="text-xs transition-colors"
+      style={{ color: "#AAFF00", opacity: 0.7, textDecoration: "none" }}
+      onMouseEnter={(e) => (e.currentTarget.style.opacity = "1")}
+      onMouseLeave={(e) => (e.currentTarget.style.opacity = "0.7")}
+      onClick={(e) => {
+        e.preventDefault()
+        document.querySelector(guideAnchor)?.scrollIntoView({ behavior: "smooth", block: "center" })
+      }}
+    >
+      ¿Cómo medir?
+    </a>
+  )
+}
 
 function FieldInput({
   label,
@@ -48,8 +42,9 @@ function FieldInput({
   error,
   placeholder,
   unit,
-  icon,
   id,
+  guideAnchor,
+  hint,
 }: {
   label: string
   value: string
@@ -57,19 +52,26 @@ function FieldInput({
   error?: string
   placeholder: string
   unit: string
-  icon: React.ReactNode
   id: string
+  guideAnchor?: string
+  hint?: string
 }) {
   return (
     <div className="flex flex-col gap-1.5">
-      <label
-        htmlFor={id}
-        className="text-xs font-medium uppercase tracking-wider flex items-center gap-1.5"
-        style={{ color: "#888" }}
-      >
-        <span style={{ color: "#666" }}>{icon}</span>
-        {label}
-      </label>
+      <div className="flex items-center justify-between">
+        <label
+          htmlFor={id}
+          className="text-sm font-medium flex items-center gap-1.5"
+          style={{ color: "#FAFAFA" }}
+        >
+          <span style={{ color: "#555" }}><RulerIcon /></span>
+          {label}
+        </label>
+        {guideAnchor && <HowToLink guideAnchor={guideAnchor} />}
+      </div>
+      {hint && (
+        <p className="text-xs" style={{ color: "#555" }}>{hint}</p>
+      )}
       <div className="relative">
         <input
           id={id}
@@ -113,72 +115,39 @@ function FieldInput({
 export default function MeasurementsForm({ onResult }: MeasurementsFormProps) {
   const [sex, setSex] = useState<Sex>("male")
   const [units, setUnits] = useState<UnitSystem>("metric")
-  const [method, setMethod] = useState<CalculationMethod>("navy")
-
-  // Navy fields (stored internally in cm)
   const [height, setHeight] = useState("")
   const [waist, setWaist] = useState("")
   const [neck, setNeck] = useState("")
   const [hip, setHip] = useState("")
-
-  // BMI fields (stored internally in cm/kg)
-  const [weight, setWeight] = useState("")
-  const [age, setAge] = useState("")
-
   const [errors, setErrors] = useState<Record<string, string>>({})
 
   const uLen = units === "metric" ? "cm" : "in"
-  const uWt = units === "metric" ? "kg" : "lb"
 
-  // Convert displayed value → internal cm/kg
-  function toInternal(val: string, type: "length" | "weight"): number {
+  function toInternal(val: string): number {
     const n = parseFloat(val)
     if (isNaN(n)) return 0
-    if (units === "imperial") {
-      return type === "length" ? inToCm(n) : lbToKg(n)
-    }
-    return n
+    return units === "imperial" ? inToCm(n) : n
   }
 
   function handleCalculate() {
-    let result: BodyFatResult
-    let errs: Record<string, string> = {}
-
-    if (method === "navy") {
-      const inputs: NavyInputs = {
-        sex,
-        height: toInternal(height, "length"),
-        waist: toInternal(waist, "length"),
-        neck: toInternal(neck, "length"),
-        ...(sex === "female" ? { hip: toInternal(hip, "length") } : {}),
-      }
-      errs = validateNavy(inputs)
-      if (Object.keys(errs).length > 0) {
-        setErrors(errs)
-        return
-      }
-      result = calculateNavy(inputs)
-    } else {
-      const inputs: BMIInputs = {
-        sex,
-        height: toInternal(height, "length"),
-        weight: toInternal(weight, "weight"),
-        age: parseInt(age) || 0,
-      }
-      errs = validateBMI(inputs)
-      if (Object.keys(errs).length > 0) {
-        setErrors(errs)
-        return
-      }
-      result = calculateBMI(inputs)
+    const inputs: NavyInputs = {
+      sex,
+      height: toInternal(height),
+      waist: toInternal(waist),
+      neck: toInternal(neck),
+      ...(sex === "female" ? { hip: toInternal(hip) } : {}),
     }
-
-    // Warn if extreme
+    const errs = validateNavy(inputs)
+    if (Object.keys(errs).length > 0) {
+      setErrors(errs)
+      return
+    }
+    const result = calculateNavy(inputs)
+    const finalErrs: Record<string, string> = {}
     if (result.percentage < 3 || result.percentage > 70) {
-      errs.general = "Resultado fuera del rango normal. Verifica tus medidas."
+      finalErrs.general = "Resultado fuera del rango normal. Verifica tus medidas."
     }
-
-    setErrors(errs)
+    setErrors(finalErrs)
     onResult(result, sex)
   }
 
@@ -209,81 +178,34 @@ export default function MeasurementsForm({ onResult }: MeasurementsFormProps) {
   })
 
   return (
-    <div className="flex flex-col gap-6">
-      {/* Unit system toggle */}
-      <div>
-        <p className="text-xs uppercase tracking-widest mb-2" style={{ color: "#555" }}>
-          Sistema de unidades
-        </p>
-        <div
-          className="flex p-1 rounded-xl"
-          style={{ background: "#111", border: "1px solid #2a2a2a" }}
-        >
-          <button
-            style={tabStyle(units === "metric")}
-            onClick={() => setUnits("metric")}
-          >
-            Métrico (cm/kg)
-          </button>
-          <button
-            style={tabStyle(units === "imperial")}
-            onClick={() => setUnits("imperial")}
-          >
-            Imperial (in/lb)
-          </button>
-        </div>
+    <div className="flex flex-col gap-5">
+      {/* Unit toggle */}
+      <div
+        className="flex p-1 rounded-xl"
+        style={{ background: "#0A0A0A", border: "1px solid #2a2a2a" }}
+      >
+        <button style={tabStyle(units === "metric")} onClick={() => setUnits("metric")}>
+          Métrico (cm)
+        </button>
+        <button style={tabStyle(units === "imperial")} onClick={() => setUnits("imperial")}>
+          Imperial (in)
+        </button>
       </div>
 
       {/* Sex selector */}
-      <div>
-        <p className="text-xs uppercase tracking-widest mb-2" style={{ color: "#555" }}>
-          Sexo
-        </p>
-        <div className="flex gap-3">
-          <button style={sexBtnStyle(sex === "male")} onClick={() => setSex("male")}>
-            ♂ Masculino
-          </button>
-          <button style={sexBtnStyle(sex === "female")} onClick={() => setSex("female")}>
-            ♀ Femenino
-          </button>
-        </div>
+      <div className="flex gap-3">
+        <button style={sexBtnStyle(sex === "male")} onClick={() => setSex("male")}>
+          ♂ Masculino
+        </button>
+        <button style={sexBtnStyle(sex === "female")} onClick={() => setSex("female")}>
+          ♀ Femenino
+        </button>
       </div>
 
-      {/* Method selector */}
-      <div>
-        <p className="text-xs uppercase tracking-widest mb-2" style={{ color: "#555" }}>
-          Método de cálculo
-        </p>
-        <div
-          className="flex p-1 rounded-xl"
-          style={{ background: "#111", border: "1px solid #2a2a2a" }}
-        >
-          <button
-            style={tabStyle(method === "navy")}
-            onClick={() => { setMethod("navy"); setErrors({}) }}
-          >
-            U.S. Navy ★
-          </button>
-          <button
-            style={tabStyle(method === "bmi")}
-            onClick={() => { setMethod("bmi"); setErrors({}) }}
-          >
-            IMC / BMI
-          </button>
-        </div>
-        <p className="text-xs mt-2" style={{ color: "#555" }}>
-          {method === "navy"
-            ? "Requiere medidas corporales. Más preciso."
-            : "Solo requiere peso, altura y edad."}
-        </p>
-      </div>
-
-      {/* Divider */}
       <div style={{ height: "1px", background: "#1e1e1e" }} />
 
       {/* Fields */}
       <div className="flex flex-col gap-4">
-        {/* Height — always */}
         <FieldInput
           id="height"
           label="Altura"
@@ -292,71 +214,45 @@ export default function MeasurementsForm({ onResult }: MeasurementsFormProps) {
           error={errors.height}
           placeholder={units === "metric" ? "175" : "69"}
           unit={uLen}
-          icon={<RulerIcon />}
+          guideAnchor="#guia-altura"
         />
-
-        {method === "navy" ? (
-          <>
-            <FieldInput
-              id="waist"
-              label="Cintura (a nivel del ombligo)"
-              value={waist}
-              onChange={setWaist}
-              error={errors.waist}
-              placeholder={units === "metric" ? "82" : "32"}
-              unit={uLen}
-              icon={<RulerIcon />}
-            />
-            <FieldInput
-              id="neck"
-              label="Cuello (parte más estrecha)"
-              value={neck}
-              onChange={setNeck}
-              error={errors.neck}
-              placeholder={units === "metric" ? "38" : "15"}
-              unit={uLen}
-              icon={<RulerIcon />}
-            />
-            {sex === "female" && (
-              <FieldInput
-                id="hip"
-                label="Cadera (parte más ancha)"
-                value={hip}
-                onChange={setHip}
-                error={errors.hip}
-                placeholder={units === "metric" ? "95" : "37"}
-                unit={uLen}
-                icon={<RulerIcon />}
-              />
-            )}
-          </>
-        ) : (
-          <>
-            <FieldInput
-              id="weight"
-              label="Peso"
-              value={weight}
-              onChange={setWeight}
-              error={errors.weight}
-              placeholder={units === "metric" ? "75" : "165"}
-              unit={uWt}
-              icon={<WeightIcon />}
-            />
-            <FieldInput
-              id="age"
-              label="Edad"
-              value={age}
-              onChange={setAge}
-              error={errors.age}
-              placeholder="30"
-              unit="años"
-              icon={<PersonIcon />}
-            />
-          </>
+        <FieldInput
+          id="waist"
+          label="Cintura"
+          value={waist}
+          onChange={setWaist}
+          error={errors.waist}
+          placeholder={units === "metric" ? "82" : "32"}
+          unit={uLen}
+          guideAnchor="#guia-cintura"
+          hint="A la altura del ombligo"
+        />
+        <FieldInput
+          id="neck"
+          label="Cuello"
+          value={neck}
+          onChange={setNeck}
+          error={errors.neck}
+          placeholder={units === "metric" ? "38" : "15"}
+          unit={uLen}
+          guideAnchor="#guia-cuello"
+          hint="En la parte más estrecha"
+        />
+        {sex === "female" && (
+          <FieldInput
+            id="hip"
+            label="Cadera"
+            value={hip}
+            onChange={setHip}
+            error={errors.hip}
+            placeholder={units === "metric" ? "95" : "37"}
+            unit={uLen}
+            guideAnchor="#guia-cadera"
+            hint="En la parte más ancha"
+          />
         )}
       </div>
 
-      {/* General error */}
       {errors.general && (
         <div
           className="px-4 py-3 rounded-xl text-sm"
@@ -370,10 +266,9 @@ export default function MeasurementsForm({ onResult }: MeasurementsFormProps) {
         </div>
       )}
 
-      {/* Submit */}
       <button
         onClick={handleCalculate}
-        className="w-full py-4 rounded-xl font-semibold text-base transition-all duration-200 mt-2"
+        className="w-full py-4 rounded-xl font-semibold text-base transition-all duration-200"
         style={{ background: "#AAFF00", color: "#0A0A0A" }}
         onMouseEnter={(e) => {
           e.currentTarget.style.background = "#bbff33"
@@ -384,7 +279,7 @@ export default function MeasurementsForm({ onResult }: MeasurementsFormProps) {
           e.currentTarget.style.boxShadow = "none"
         }}
       >
-        Calcular mi grasa corporal →
+        Calcular →
       </button>
     </div>
   )

@@ -117,16 +117,17 @@ function MeasurementGuide() {
       </div>
       <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
         {[
-          { title: "Altura", icon: "↕", desc: "Párate descalzo contra una pared recta. Mide desde el suelo hasta la parte más alta de tu cabeza." },
-          { title: "Cintura", icon: "◯", desc: "Mide horizontalmente a la altura del ombligo. Relaja el abdomen, no metas el estómago." },
-          { title: "Cuello", icon: "⌒", desc: "Mide en la parte más estrecha del cuello, justo debajo de la nuez de Adán. Cabeza en posición neutral." },
-          { title: "Cadera (mujeres)", icon: "◡", desc: "Mide en la parte más ancha de las caderas y glúteos, con los pies juntos." },
-          { title: "Momento ideal", icon: "☀", desc: "Mide por la mañana, en ayunas, antes de hacer ejercicio. Los resultados son más consistentes." },
-          { title: "Precisión", icon: "✓", desc: "Usa una cinta métrica flexible no elástica. Toma cada medida 2-3 veces y usa el promedio." },
+          { id: "guia-altura",  title: "Altura",          icon: "↕", desc: "Párate descalzo contra una pared recta. Mide desde el suelo hasta la parte más alta de tu cabeza." },
+          { id: "guia-cintura", title: "Cintura",          icon: "◯", desc: "Mide horizontalmente a la altura del ombligo. Relaja el abdomen, no metas el estómago." },
+          { id: "guia-cuello",  title: "Cuello",           icon: "⌒", desc: "Mide en la parte más estrecha del cuello, justo debajo de la nuez de Adán. Cabeza en posición neutral." },
+          { id: "guia-cadera",  title: "Cadera (mujeres)", icon: "◡", desc: "Mide en la parte más ancha de las caderas y glúteos, con los pies juntos." },
+          { id: "guia-momento", title: "Momento ideal",    icon: "☀", desc: "Mide por la mañana, en ayunas, antes de hacer ejercicio. Los resultados son más consistentes." },
+          { id: "guia-tips",    title: "Precisión",        icon: "✓", desc: "Usa una cinta métrica flexible no elástica. Toma cada medida 2-3 veces y usa el promedio." },
         ].map((tip) => (
           <div
             key={tip.title}
-            className="p-5 rounded-xl"
+            id={tip.id}
+            className="p-5 rounded-xl scroll-mt-24"
             style={{ border: "1px solid #1e1e1e", background: "#0d0d0d" }}
           >
             <div className="font-display text-2xl mb-3" style={{ color: "#AAFF00" }}>{tip.icon}</div>
