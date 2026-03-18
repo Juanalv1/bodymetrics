@@ -14,7 +14,7 @@ const dmSerif = DM_Serif_Display({
   weight: "400",
 })
 
-const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL ?? "https://bodymetrics-lake.vercel.app"
+const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL ?? "https://bodymetrics.xyz"
 
 export const metadata: Metadata = {
   metadataBase: new URL(BASE_URL),

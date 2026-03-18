@@ -3,7 +3,7 @@ import Navbar from "@/components/layout/Navbar"
 import Footer from "@/components/layout/Footer"
 import CalculatorShell from "@/components/calculator/CalculatorShell"
 
-const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL ?? "https://bodymetrics-lake.vercel.app"
+const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL ?? "https://bodymetrics.xyz"
 
 export const metadata: Metadata = {
   title: "Calculadora de Grasa Corporal Gratis | BodyMetrics",
