@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import { DM_Sans, DM_Serif_Display } from "next/font/google"
 import "./globals.css"
+import { BASE_URL } from "@/lib/config"
 
 const dmSans = DM_Sans({
   subsets: ["latin"],
@@ -13,8 +14,6 @@ const dmSerif = DM_Serif_Display({
   variable: "--font-dm-serif",
   weight: "400",
 })
-
-const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL ?? "https://bodymetrics.xyz"
 
 export const metadata: Metadata = {
   metadataBase: new URL(BASE_URL),
