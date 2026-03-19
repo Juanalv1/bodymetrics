@@ -173,7 +173,7 @@ function MeasurementGuide() {
             <h3 className="text-sm font-semibold mb-2" style={{ color: "#FAFAFA" }}>
               {tip.title}
             </h3>
-            <p className="text-xs leading-relaxed" style={{ color: "#999" }}>
+            <p className="text-xs leading-relaxed" style={{ color: "#bbb" }}>
               {tip.desc}
             </p>
           </div>
