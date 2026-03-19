@@ -75,9 +75,8 @@ function FieldInput({
       <div className="relative">
         <input
           id={id}
-          type="number"
+          type="text"
           inputMode="decimal"
-          step="any"
           value={value}
           onChange={(e) => onChange(e.target.value)}
           placeholder={placeholder}
@@ -126,14 +125,18 @@ export default function MeasurementsForm({ onResult }: MeasurementsFormProps) {
   const uLen = units === "metric" ? "cm" : "in"
   const uWeight = units === "metric" ? "kg" : "lb"
 
+  function parseDecimal(val: string): number {
+    return parseFloat(val.replace(",", "."))
+  }
+
   function toInternal(val: string): number {
-    const n = parseFloat(val)
+    const n = parseDecimal(val)
     if (isNaN(n)) return 0
     return units === "imperial" ? inToCm(n) : n
   }
 
   function toKg(val: string): number | undefined {
-    const n = parseFloat(val)
+    const n = parseDecimal(val)
     if (isNaN(n) || n <= 0) return undefined
     return units === "imperial" ? Math.round(n * 0.453592 * 10) / 10 : n
   }
