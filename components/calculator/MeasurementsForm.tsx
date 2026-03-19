@@ -77,6 +77,7 @@ function FieldInput({
           id={id}
           type="number"
           inputMode="decimal"
+          step="any"
           value={value}
           onChange={(e) => onChange(e.target.value)}
           placeholder={placeholder}

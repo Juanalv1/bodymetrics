@@ -6,12 +6,16 @@ export function calculateNavy(inputs: NavyInputs): BodyFatResult {
   let percentage: number
 
   if (sex === "male") {
-    // BF% = 86.010 * log10(abdomen - neck) - 70.041 * log10(height) + 36.76
-    percentage = 86.010 * Math.log10(waist - neck) - 70.041 * Math.log10(height) + 36.76
+    // Hodgdon & Beckett (NHRC): BD = 1.0324 - 0.19077×log10(waist-neck) + 0.15456×log10(height)
+    // BF% = 495 / BD - 450
+    const bd = 1.0324 - 0.19077 * Math.log10(waist - neck) + 0.15456 * Math.log10(height)
+    percentage = 495 / bd - 450
   } else {
-    // BF% = 163.205 * log10(waist + hip - neck) - 97.684 * log10(height) - 78.387
+    // Hodgdon & Beckett (NHRC): BD = 1.29579 - 0.35004×log10(waist+hip-neck) + 0.22100×log10(height)
+    // BF% = 495 / BD - 450
     const hipValue = hip ?? 0
-    percentage = 163.205 * Math.log10(waist + hipValue - neck) - 97.684 * Math.log10(height) - 78.387
+    const bd = 1.29579 - 0.35004 * Math.log10(waist + hipValue - neck) + 0.22100 * Math.log10(height)
+    percentage = 495 / bd - 450
   }
 
   percentage = Math.round(percentage * 10) / 10

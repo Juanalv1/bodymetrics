@@ -64,6 +64,13 @@ export default function ResultsPanel({ result, sex }: ResultsPanelProps) {
             </span>
           </span>
         </div>
+
+        {/* Accuracy note */}
+        <div className="mt-2 flex justify-center">
+          <span className="text-xs" style={{ color: "#383838" }}>
+            Margen de error estimado: ±3–4 puntos porcentuales
+          </span>
+        </div>
       </div>
 
       {/* Reference table */}
@@ -110,7 +117,7 @@ export default function ResultsPanel({ result, sex }: ResultsPanelProps) {
                   className="text-sm font-medium tabular-nums"
                   style={{ color: isCurrent ? cat.color : "#555" }}
                 >
-                  {min}–{max === 100 ? min + "%+" : max + "%"}
+                  {min}–{max >= 100 ? Math.floor(min) + "%+" : Math.floor(max) + "%"}
                 </span>
               </div>
             )
