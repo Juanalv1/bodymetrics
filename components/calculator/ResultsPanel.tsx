@@ -11,7 +11,7 @@ interface ResultsPanelProps {
 }
 
 export default function ResultsPanel({ result, sex }: ResultsPanelProps) {
-  const { percentage, category, categoryColor, method, bmi } = result
+  const { percentage, category, categoryColor, method, bmi, fatMassKg, leanMassKg } = result
 
   return (
     <div className="flex flex-col gap-6 animate-fade-in">
@@ -39,6 +39,36 @@ export default function ResultsPanel({ result, sex }: ResultsPanelProps) {
             {category}
           </span>
         </div>
+
+        {/* Fat & lean mass */}
+        {fatMassKg !== undefined && leanMassKg !== undefined && (
+          <div className="mt-5 grid grid-cols-2 gap-3">
+            <div
+              className="flex flex-col items-center py-3 rounded-xl"
+              style={{ background: "#0d0d0d", border: "1px solid #1e1e1e" }}
+            >
+              <span className="text-xs uppercase tracking-widest mb-1" style={{ color: "#555" }}>
+                Masa grasa
+              </span>
+              <span className="font-display text-2xl" style={{ color: "#EF4444" }}>
+                {fatMassKg}
+                <span className="text-sm ml-1" style={{ color: "#666" }}>kg</span>
+              </span>
+            </div>
+            <div
+              className="flex flex-col items-center py-3 rounded-xl"
+              style={{ background: "#0d0d0d", border: "1px solid #1e1e1e" }}
+            >
+              <span className="text-xs uppercase tracking-widest mb-1" style={{ color: "#555" }}>
+                Masa magra
+              </span>
+              <span className="font-display text-2xl" style={{ color: "#22C55E" }}>
+                {leanMassKg}
+                <span className="text-sm ml-1" style={{ color: "#666" }}>kg</span>
+              </span>
+            </div>
+          </div>
+        )}
 
         {/* BMI if available */}
         {bmi && (

@@ -8,6 +8,7 @@ export interface NavyInputs {
   waist: number    // cm
   neck: number     // cm
   hip?: number     // cm — solo mujeres
+  weight?: number  // kg — opcional, para masa magra/grasa
 }
 
 export interface BMIInputs {
@@ -23,6 +24,8 @@ export interface BodyFatResult {
   categoryColor: string
   method: CalculationMethod
   bmi?: number
+  fatMassKg?: number
+  leanMassKg?: number
 }
 
 export interface BodyFatCategory {

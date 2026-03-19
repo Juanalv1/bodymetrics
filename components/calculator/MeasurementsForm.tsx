@@ -117,12 +117,14 @@ export default function MeasurementsForm({ onResult }: MeasurementsFormProps) {
   const [sex, setSex] = useState<Sex>("male")
   const [units, setUnits] = useState<UnitSystem>("metric")
   const [height, setHeight] = useState("")
+  const [weight, setWeight] = useState("")
   const [waist, setWaist] = useState("")
   const [neck, setNeck] = useState("")
   const [hip, setHip] = useState("")
   const [errors, setErrors] = useState<Record<string, string>>({})
 
   const uLen = units === "metric" ? "cm" : "in"
+  const uWeight = units === "metric" ? "kg" : "lb"
 
   function toInternal(val: string): number {
     const n = parseFloat(val)
@@ -130,13 +132,21 @@ export default function MeasurementsForm({ onResult }: MeasurementsFormProps) {
     return units === "imperial" ? inToCm(n) : n
   }
 
+  function toKg(val: string): number | undefined {
+    const n = parseFloat(val)
+    if (isNaN(n) || n <= 0) return undefined
+    return units === "imperial" ? Math.round(n * 0.453592 * 10) / 10 : n
+  }
+
   function handleCalculate() {
+    const weightKg = toKg(weight)
     const inputs: NavyInputs = {
       sex,
       height: toInternal(height),
       waist: toInternal(waist),
       neck: toInternal(neck),
       ...(sex === "female" ? { hip: toInternal(hip) } : {}),
+      ...(weightKg !== undefined ? { weight: weightKg } : {}),
     }
     const errs = validateNavy(inputs)
     if (Object.keys(errs).length > 0) {
@@ -216,6 +226,15 @@ export default function MeasurementsForm({ onResult }: MeasurementsFormProps) {
           placeholder={units === "metric" ? "175" : "69"}
           unit={uLen}
           guideAnchor="#guia-altura"
+        />
+        <FieldInput
+          id="weight"
+          label="Peso (opcional)"
+          value={weight}
+          onChange={setWeight}
+          placeholder={units === "metric" ? "70" : "154"}
+          unit={uWeight}
+          hint="Para calcular masa grasa y magra en kg"
         />
         <FieldInput
           id="waist"

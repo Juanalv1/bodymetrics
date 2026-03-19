@@ -2,7 +2,7 @@ import type { NavyInputs, BodyFatResult } from "../types"
 import { getCategory } from "../types"
 
 export function calculateNavy(inputs: NavyInputs): BodyFatResult {
-  const { sex, height, waist, neck, hip } = inputs
+  const { sex, height, waist, neck, hip, weight } = inputs
   let percentage: number
 
   if (sex === "male") {
@@ -21,11 +21,20 @@ export function calculateNavy(inputs: NavyInputs): BodyFatResult {
   percentage = Math.round(percentage * 10) / 10
   const { label, color } = getCategory(percentage, sex)
 
+  let fatMassKg: number | undefined
+  let leanMassKg: number | undefined
+  if (weight && weight > 0) {
+    fatMassKg = Math.round(weight * (percentage / 100) * 10) / 10
+    leanMassKg = Math.round((weight - fatMassKg) * 10) / 10
+  }
+
   return {
     percentage,
     category: label,
     categoryColor: color,
     method: "navy",
+    fatMassKg,
+    leanMassKg,
   }
 }
 
